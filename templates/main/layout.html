@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block layout %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+      <a class="navbar-brand" href="../">
+        <img class="navbar-brand" class="d-inline-block align-top" src="{% static '/main/img/stock_control_logo.png' %}"/>
+        Stock Control</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link text-center btn" href="{% url 'login' %}">Ingresar</a>
+            
+          </div>
+        </div>
+        
+        
+  </div>
+</nav>
+{% block variable_content %}{% endblock %}
+<footer class="footer">
+  <div class="container">
+    <div class="text-muted row">
+      <p class="text-center col mb-0">stock_control.com © 2021-2022</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}

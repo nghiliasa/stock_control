@@ -1,0 +1,325 @@
+{% extends "dashboard/layout.html" %}
+{% load static %}
+<!-- BLOQUE PARA EL MODAL  -->
+{% block modal %}
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle"><span id="title_modal"></span> Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form class="" id="form" method="POST" name="product" enctype="multipart/form-data" autocomplete="off">{% csrf_token %}
+              <div class="col-12 loading">
+                <i class="fa-li fa fa-spinner fa-spin"></i>
+              </div>
+              <div class="col-12 row p-0 m-0 pt-2">
+                <div class="col-md-6 col-12 pt-2">
+                  <label for="image-input" class="logo-product">
+                    <div class="img-responsive img-thumbnail" title="Product Image"></div></label>
+                  <div class="delete_image" onclick="delete_image(this)"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                  <input class="form-control file" type="file" name="image" accept="image/x-png,image/gif,image/jpeg" id="image-input" placeholder="Product Image">
+                </div>  
+                <div class="col-md-6 col-12">
+                    <div class="col px-0">
+                      <label for="name">Name</label>
+                      <input type="text" required class="form-control" autocomplete="off" name="name" id="name" placeholder="Name Product">  
+                    </div>
+                    <div class="col px-0">
+                      <label for="price">Price</label>
+                      <input type="number" min="0" step="any" required class="form-control" name="price" id="price" placeholder="{{user.company.currency}} 00.00">  
+                    </div>
+                    <div class="col px-0">
+                      <label for="price"><i class="bi bi-youtube"></i> Video</label>
+                      <input type="text" class="form-control" name="video" id="video">  
+                    </div>
+                  </div>
+                  <div class="col">
+                    <label for="name">Ref. Code</label>
+                    <input type="text" class="form-control" autocomplete="off" name="reference_code" id="reference_code">  
+                  </div>
+                <div class="col-6 px-0">
+                  <label for="category">Categories</label>
+                  <select id="category" name="category" class="form-control">
+                      <option disabled selected>Seleccione...</option>
+                    {% for i in categories %}
+                      <option value="{{i.id}}">{{i.name}}</option>
+                    {% endfor %}
+                  </select> 
+                </div>  
+                <div class="col px-0">
+                  <div class="col-12 pl-0 text-center">  
+                    <label for="status">Status</label>
+                  </div>
+                  <div class="col mx-auto text-center">
+                    <input type="checkbox" name="status" checked id="status" data-toggle="toggle">
+                  </div>
+                </div>
+                <div class="col-md-10">
+                  <label for="tags">Ingredients</label>
+                  <div name="tags_ingredients" class="form-control" id="tags_ingredients"></div>
+                </div>
+                <div class="btn-add-ingredient col-12 col-md-1 align-self-middle pb-2 mt-2 pt-md-2 px-md-0">
+                  <div title="Add Ingredients" class="btn btn-outline-primary add-tag mt-md-4" 
+                  data-toggle="collapse" href="#collapseIngredients" role="button" aria-expanded="false" aria-controls="collapseIngredients">
+                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                  </div>
+                </div>
+                <div id="collapseIngredients" class="content_tags_ingredients collapse mx-auto col-12">
+                  <div class="card">
+                    <div class="col-md-12 mt-2"><input type="text" class="search_tag form-control" placeholder="search"></div>
+                    <ul id="card-body" class="card-body row">
+                      {% for i in ingredients %}
+                        {% if i.status %}
+                          <li class="col-md-4 col-4 px-0">
+                            <label>
+                              <input type="checkbox" onclick="add_tag({{i.id}}, 'tags_ingredients')" class="tag_selected_orders" text="{{i.name}}" value="{{i.id}}"> {{i.name}}
+                            </label>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </div>       
+                </div>
+                <div class="col-md-10 mt-2">
+                  <label for="tags">Additionals</label>
+                  <div name="tags_additional" class="form-control" id="tags_additional"></div>
+                </div>
+                <div class="btn-add-additional col-12 col-md-1 align-self-middle py-2 pt-md-2 px-md-0">
+                  <div title="Add Additional" class="btn btn-outline-primary add-tag mt-md-4 mt-3" data-toggle="collapse" href="#collapseAdditional" role="button" aria-expanded="false" aria-controls="collapseIngredients">
+                  <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                  </div>
+                </div>
+                <div id="collapseAdditional" class="content_tags_additional collapse mx-auto col-12">
+                  <div class="card">
+                    <div class="col-md-12 mx-0 mt-2"><input type="text" class="search_tag form-control" placeholder="search"></div>
+                    <ul id="card-body" class="card-body row">
+                      {% for i in ingredients %}
+                        {% if i.status %}
+                          <li class="col-md-4 col-4 px-0">
+                            <label><input type="checkbox" onclick="add_tag({{i.id}}, 'tags_additional')" 
+                              class="tag_selected_orders" text="{{i.name}}" value="{{i.id}}">
+                              {{i.name}} <span class="price-tag">{{user.company.currency}}  {{i.price}}</span>
+                              </label>
+                          </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </div>       
+                </div> 
+                <div class="form-group col-12">
+                  <label for="description">Description</label>
+                  <textarea name="description" class="form-control" id="description" rows="3"></textarea>
+                </div>
+                <div class="modal-footer col-12">
+                  <div class="btn-group" role="group">
+                    <div type="button" class="btn btn-danger del"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+                    <button type="submit" class="btn btn-primary save"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                  </div>
+                </div>
+                <input type="hidden" name="item_id" id="itemID">
+                <input type="hidden" value="0" name="delete" id="delete">
+              </div> 
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+<!-- BLOQUE PARA EL CONTENIDO VARIABLE  -->
+{% block variable_content %}
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
+      <div class="title_section">
+        <h1 class="h2">Products</h1>
+      </div>
+      <div class="btn-toolbar mb-2 mb-md-0">
+          <button type="button" class="btn btn-primary btn-add" title="Add Product" data-toggle="modal" data-target="#productModal">+ Add Product</button>
+      </div>
+    </div>
+    <div class="content">
+      <table cellpadding="0" cellspacing="0" id="grid-data-items" style="width:100%" class="display responsive nowrap table table-condensed table-hover table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th class="d-none d-md-table-cell">Picture</th>
+            <th class="d-none d-md-table-cell">RC</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th class="d-none d-md-table-cell">Category</th>
+            <th>Starred on Web</th>
+            <th class="d-none d-md-table-cell">Status</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock %}
+<!-- BLOQUE PARA LOS SCRIPTS  -->
+{% block scripts %}
+<script>
+//--------- STARRED ON WEB PRODUCTS -------------
+function starred_on_web(item){
+  console.log('llega',item)
+  $(`tr:eq(${item})`).find('.start').hide()
+  $(`tr:eq(${item})`).find('.spiner').show()
+  item_id_tr= $(`tr:eq(${item})`).attr('id-item')
+  if($(`tr:eq(${item})`).find('i').hasClass('not_starred')){
+    datos= {item_id: item_id_tr, starred_on_web: 1, csrfmiddlewaretoken: '{{ csrf_token }}'}
+    $.ajax({
+        url: '#',
+        type: 'POST',
+        data: datos,
+        success: function(data) {
+          //table_view.ajax.reload()
+          console.log('se destaco el producto en la web')
+        },
+        error: function(data){
+          $(`tr:eq(${item})`).find('.start').html('<i class="bi bi-star not_starred"></i>').show()
+          console.log('no destaco')
+        },
+        complete: function(data){
+          console.log(item)
+          $(`tr:eq(${item})`).find('.start').html('<i class="bi bi-star-fill starred"></i>').show()
+          $(`tr:eq(${item})`).find('.spiner').hide()
+        }
+    });
+  }else{
+    datos= {item_id: item_id_tr, starred_on_web: 0, csrfmiddlewaretoken: '{{ csrf_token }}'}
+    $.ajax({
+        url: '#',
+        type: 'POST',
+        data: datos,
+        success: function(data) {
+          //table_view.ajax.reload()
+          console.log('quito el destacado sin problemas')
+        },
+        error: function(data){
+          console.log('no quito el destacado')
+          $(`tr:eq(${item})`).find('.start').html('<i class="bi bi-star-fill starred"></i>').show()
+        },
+        complete: function(data){
+          $(`tr:eq(${item})`).find('.start').html('<i class="bi bi-star not_starred"></i>').show()
+          $(`tr:eq(${item})`).find('.spiner').hide()
+        }
+    });
+  }
+}
+//-------------- DOCUMENT READY ----------------
+$(document).ready(function(){
+    table_view = $('#grid-data-items').DataTable({
+      responsive: true,
+      "order": [[ 1, "desc" ]],
+      "ajax": {
+        'url':'datos?item=all_item',
+        'dataSrc':'',
+        'mDataProp': '',
+        "processing": true,
+        "serverSide": true,
+      },
+      columns: [
+        { "data": "image_thumb",
+        "className": "d-none d-md-table-cell"},
+        { "data": "reference_code",
+          "className": "d-none d-md-table-cell"},
+        { "data": "name"},
+        { "data": "price"},
+        { "data": "category_name",
+          "className": "d-none d-md-table-cell"},
+        { "data": "starred_on_web"},
+        { "data": "status",
+          "className": "d-none d-md-table-cell"}
+      ],
+      'createdRow': function(row, data, dataIndex ) {
+        $(row).attr('id-item', data.id);
+      },
+      columnDefs:
+            [
+            {
+                "targets": 0,
+                "data": 'image_thumb',
+                "render": function (data, type, row, meta) {
+                  return `<div style="background-image: url(${data});" class="img-grilla img-thumbnail img-responsive"/></div>`;
+                }
+            },
+            {
+                "targets": 1,
+                "data": 'reference_code',
+                "render": function (data, type, row, meta) {
+                    return data ? data : '';
+                }
+            },
+            {
+                "targets": 3,
+                "data": 'price',
+                "render": function (data, type, row, meta) {
+                    return '{{company.currency}} ', data ? data.toFixed(2) : 0;
+                }
+            },
+            {
+                "targets": 2,
+                "data": 'name',
+                "render": function (data, type, row, meta) {
+                  return `<div class="name_item_row"/>${data}</div>`;
+                }
+            },
+            {
+              "targets": 5,
+              "data": 'starred_on_web',
+              "render": function (data, type, row, meta) {
+                  if(data == 1){
+                    icon='<i class="bi bi-star-fill starred"></i>'
+                  }else{
+                    icon='<i class="bi bi-star not_starred"></i>'
+                  } 
+                  
+                  return `<span class="starred_on_web">
+                    <div class="spiner">
+                      <div class="spinner-border" role="status"></div>
+                    </div>
+                    <div class="start">${icon}<div>
+                  </span>`
+              }
+            },
+            {
+              "targets": 6,
+              "data": 'status',
+              "render": function (data, type, row, meta) {
+                  if(data == 1){
+                    icon='<i class="fa fa-check-square-o" aria-hidden="true"></i>'
+                  }else{
+                    icon='<i class="fa fa-ban" aria-hidden="true"></i>'
+                  } 
+                  return icon
+              }
+            }
+          ]
+      
+    })
+    $('table').parent().addClass('px-0')
+    $('#grid-data-items').on( 'init.dt', function () {
+      const tbody = document.querySelector('.table-body');
+      tbody.addEventListener('click', function (e) {
+      const cell = e.target.closest('td');
+      if (!cell) {return;} // Quit, not clicked on a cell
+      const row = cell.parentElement;
+      if(cell.cellIndex == 5){
+        console.log('destaca')
+        starred_on_web(row.rowIndex)
+      }else{
+        console.log('no destaca')
+        data= $(`tr:eq(${row.rowIndex})`).attr('id-item')
+        edit_item(data, 'item')
+        $('#productModal').modal('show')
+      }
+      //console.log(cell.innerHTML, row.rowIndex, cell.cellIndex);
+      })  
+    }).dataTable()
+  })
+</script>
+{% endblock %}

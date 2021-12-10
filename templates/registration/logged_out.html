@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <link rel="icon" type="image/png" href="{% static 'main/img/stock_control_logo.png' %}">
+    <title>Stock Control · Logout</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/floating-labels/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'main/css/login.css' %}" rel="stylesheet">
+  </head>
+  <body>
+      <div class="container text-center mb-4">
+        <img class="mb-4" src="{% static 'main/img/stock_control_logo.png' %}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Thanks for your time here</h1>
+        <p>Click <a href="{% url 'login'%}">here </a>to login again.</p>
+      </div>
+  </body>
+</html>

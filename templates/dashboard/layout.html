@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block layout %}
+  <nav class="navbar nav-header sticky-top bg-dark-nav flex-md-nowrap p-0">
+    <div class="header-nav d-flex ml-auto justify-content-end col-md-9 py-2">
+      <div class="name_user d-flex align-items-center col mr-auto">Hola {{ user.username }}</div>
+      <ul class="nav">
+        <li class="nav-item-header dropdown d-flex align-items-center">
+          <a class="nav-link" title="Notifications" target="_blanck" href="#" 
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            <span class="animate__animated animate__flash badge badge-light badge badge-light">99</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="header-notifition">Notifications</div>
+            <div class="tooltip-header"><a href="">Hay una nueva Orden 003 <span>Hace 5 min</span></a></div>
+            <div class="tooltip-header"><a href="">La Orden 003 esta en proceso <span>Hace 32 min</span></a></div>
+            <div class="tooltip-header"><a href="">La Orden 003 se cancelo <span>Hace 2 min</span></a></div>
+          </div>
+        </li>
+        <li class="nav-item-header d-flex align-items-center">
+          <a class="nav-link" title="Sign Out" href="{% url 'logout' %}">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li class="nav-item-header d-md-none d-flex align-items-center">
+          <button class="navbar-toggler d-md-none collapsed" type="button" data-toggle="collapse" 
+            data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <div class="col-md-12 company_logo">
+          <a href="/dashboard/">
+            <div class="img-thumbnail img-responsive mb-2" 
+            style="background-image: url({% static 'main/img/stock_control_logo.png' %})" alt="{{ object.name }}"></div>
+          </a>
+        </div>
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
+                <i class="bi bi-cart-plus" aria-hidden="true"></i>
+                Products
+              </a>
+            </li>
+            
+            <div class="qr-nav mt-4">
+              <a href="/qr-code/"><img src="{{user.company.qr_image.url}}" alt="qr-code" title="Print QR Code"></a>
+            </div>
+          </ul>
+        </div>
+      </nav>
+      <!-- BLOQUE DEL CONTENIDO VARIABLE  -->
+      {% block variable_content %}{% endblock %}
+    </div>
+  </div>
+
+{% endblock %}
