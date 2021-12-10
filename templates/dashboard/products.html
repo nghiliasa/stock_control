@@ -223,8 +223,6 @@ $(document).ready(function(){
         "serverSide": true,
       },
       columns: [
-        { "data": "image_thumb",
-        "className": "d-none d-md-table-cell"},
         { "data": "reference_code",
           "className": "d-none d-md-table-cell"},
         { "data": "name"},
@@ -241,13 +239,6 @@ $(document).ready(function(){
       columnDefs:
             [
             {
-                "targets": 0,
-                "data": 'image_thumb',
-                "render": function (data, type, row, meta) {
-                  return `<div style="background-image: url(${data});" class="img-grilla img-thumbnail img-responsive"/></div>`;
-                }
-            },
-            {
                 "targets": 1,
                 "data": 'reference_code',
                 "render": function (data, type, row, meta) {
@@ -255,17 +246,17 @@ $(document).ready(function(){
                 }
             },
             {
+              "targets": 2,
+              "data": 'name',
+              "render": function (data, type, row, meta) {
+                return `<div class="name_item_row"/>${data}</div>`;
+              }
+            },
+            {
                 "targets": 3,
                 "data": 'price',
                 "render": function (data, type, row, meta) {
                     return '{{company.currency}} ', data ? data.toFixed(2) : 0;
-                }
-            },
-            {
-                "targets": 2,
-                "data": 'name',
-                "render": function (data, type, row, meta) {
-                  return `<div class="name_item_row"/>${data}</div>`;
                 }
             },
             {
