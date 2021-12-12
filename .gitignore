@@ -15,7 +15,6 @@ media/dashboard/items/
 media/dashboard/promotions/
 media/dashboard/qr/
 media/dashboard/qrs/*.png
-virtualenv/
 
 ### Archivos innecesarios de django  ###
 

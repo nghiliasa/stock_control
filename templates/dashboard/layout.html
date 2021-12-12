@@ -6,6 +6,19 @@
     <div class="header-nav d-flex ml-auto justify-content-end col-md-9 py-2">
       <div class="name_user d-flex align-items-center col mr-auto">Hola {{ user.username }}</div>
       <ul class="nav">
+        <li class="nav-item-header dropdown d-flex align-items-center">
+          <a class="nav-link" title="Notifications" target="_blanck" href="#" 
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            <span class="animate__animated animate__flash badge badge-light badge badge-light">99</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="header-notifition">Notifications</div>
+            <div class="tooltip-header"><a href="">Hay una nueva Orden 003 <span>Hace 5 min</span></a></div>
+            <div class="tooltip-header"><a href="">La Orden 003 esta en proceso <span>Hace 32 min</span></a></div>
+            <div class="tooltip-header"><a href="">La Orden 003 se cancelo <span>Hace 2 min</span></a></div>
+          </div>
+        </li>
         <li class="nav-item-header d-flex align-items-center">
           <a class="nav-link" title="Sign Out" href="{% url 'logout' %}">
             <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -28,10 +41,9 @@
             <div class="img-thumbnail img-responsive mb-2" 
             style="background-image: url({% static 'main/img/stock_control_logo.png' %})" alt="{{ object.name }}"></div>
           </a>
-          <h1 class="text-center h3 mb-3 font-weight-normal">Stock Control</h1>
         </div>
         <div class="sidebar-sticky">
-          <ul class="nav flex-column mb-5">
+          <ul class="nav flex-column">
             <li class="nav-item">
               <a class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}" href="{% url 'dashboard' %}">
                 <i class="bi bi-cart-plus" aria-hidden="true"></i>

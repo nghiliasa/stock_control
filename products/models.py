@@ -19,7 +19,7 @@ class Item(models.Model):
     reference_code = models.CharField(max_length=60)
     price = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=2)
     stock = models.PositiveIntegerField(null=True, blank=True)
-    category = models.ManyToManyField(Category)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

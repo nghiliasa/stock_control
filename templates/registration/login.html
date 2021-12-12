@@ -51,13 +51,13 @@
         <p class="mt-5 mb-3 text-muted text-center">&copy; 2021-2022</p>
       </form>
     {% else %}
-      <div class="form-signin text-center mb-4">
-        <img class="mb-4" src="{% static 'main/img/stock_control_logo.png' %}" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Stock Control</h1>
-        <span class="login100-form-title">
-          <div class="alert alert-success text-center p-t-12" role="alert">
-            <a class="btn btn-lg btn-primary btn-block" href="{% url 'logout' %}">Logout</a>
-          </div>
-        </span>
+      <div class="form-signin">
+        <div class="text-center mb-4">
+          <img class="mb-4" src="{% static 'main/img/stock_control_logo.png' %}" alt="" width="72" height="72">
+          <h1 class="h3 mb-3 font-weight-normal">Stock Control</h1>
+          <p>Ya has iniciado sesión con la cuenta {{user.username}}</p>
+          <a class="btn btn-lg btn-primary btn-block" href="{% url 'logout' %}">Cerrar sesión</a>
+          <a class="btn btn-lg btn-primary btn-block" href="{% url 'dashboard' %}">Ir al dashboard</a>
+        </div>
       </div>
     {% endif %}

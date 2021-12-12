@@ -17,7 +17,6 @@ class ItemAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'last_updated',)
     list_display = ('reference_code', 'name', 'price', 'stock',)
     list_filter = ('category',)
-    filter_horizontal = ('category',)
     search_fields = ('name',)
     ordering = ('name',)
     fieldsets = (
