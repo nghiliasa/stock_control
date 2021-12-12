@@ -18,3 +18,10 @@ Si desea, puede ver esta app corriendo desde
 la web, en el siguiente link:
 
 https://stock-c0ntr0l.herokuapp.com/
+
+---------------------------------------------------------------------
+
+Datos de logueo de superadmin:
+
+Usuario: testuser
+clave: 010203
