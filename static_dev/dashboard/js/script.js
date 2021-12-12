@@ -1,7 +1,7 @@
 $('body').on('click', '.save', function(e){
-  console.log('send form')
-  form = $(this).parents('form').serialize()  
-  //$('#wait').show()
+  form = $(this).parents('form').serialize()
+  event.preventDefault();
+  event.stopImmediatePropagation();
   loading()
   
   $('.form-control').attr('style', 'border: 1px solid #ced4da')
@@ -32,9 +32,8 @@ $('body').on('click', '.save', function(e){
     }
   })
 })  
-  
+
 function edit_item(id_edit,item){
-    console.log('edito')
     $('.loading').show()
     $('label.error').hide()
     $('.btn-danger').show()
@@ -104,14 +103,14 @@ function edit_item(id_edit,item){
       $(button).parent().find('.btn-danger').html('Confirm?').attr({'type':'submit','onclick': `delete_item(this, ${item}, "bye")`})
       return false
     }
-    if(confirm=="bye"){
+    else if(confirm=="bye"){
       console.log('delete')
       $('#delete').val(-1)
       loading()
       $.ajax({
       url: $(this).attr('action'),
-      type: 'delete',
-      data: {item_id:item, csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val()},
+      type: 'post',
+      data: {name: $('#name').val(), item_id:item, delete:-1, csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val()},
       success: function(data) {
         if($('.table-body').length > 0){
           $('.table-body').html(`<div class="loading_table">

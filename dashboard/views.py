@@ -47,37 +47,45 @@ class Datos(View):
 @login_required(login_url='/login/')
 def dashboard(request):
     categories = Category.objects.all().order_by('name')
-    products = Item.objects.all().order_by('reference_code')
-    if request.method == 'DELETE':
-        print('llego aca')
-        item_id = int(request.DELETE.get('item_id'))
-        print(item_id)
-        item = Item.objects.get(id=item_id)
-        item.delete()
-    if request.method == 'POST':
-        category_id = int(request.POST['category'])
-        category = Category.objects.get(id=category_id)
-        reference_code = request.POST['reference_code']
-        name = request.POST['name']
-        price = float(request.POST['price'])
-        stock = int(request.POST['stock'])
-        if int(request.POST['item_id']) == 0:
-            new_item = Item(
-                reference_code=reference_code,
-                name=name,
-                price=price,
-                stock=stock,
-                category=category,
-            )
-            new_item.save()
-        else:
-            item_id = int(request.POST.get('item_id'))
-            item = Item.objects.get(id=item_id)
-            item.reference_code = reference_code
-            item.name = name
-            item.price = price
-            item.stock = stock
-            item.category = category
-            item.save()
+    products = Item.objects.all()
     context = {'categories' : categories, 'products' : products}
+    if request.method == 'POST':
+        try:
+            # ---------- Agrego un producto ----------
+            
+            if int(request.POST['item_id']) == 0:
+                print('llego aca 2')
+                category = Category.objects.get(id=int(request.POST['category']))
+                new_item = Item(
+                    reference_code=request.POST['reference_code'],
+                    name=request.POST['name'],
+                    price=float(request.POST['price']),
+                    stock=int(request.POST['stock']),
+                    category=category,
+                )
+                new_item.save()
+                
+            # ---------- Modifico un producto ----------
+                
+            elif int(request.POST['item_id']) > 0 and int(request.POST.get('delete')) == 0:
+                print('llego aca 3')
+                category = Category.objects.get(id=int(request.POST['category']))
+                item_id = int(request.POST.get('item_id'))
+                item = Item.objects.get(id=item_id)
+                item.reference_code = request.POST['reference_code']
+                item.name = request.POST['name']
+                item.price = float(request.POST['price'])
+                item.stock = int(request.POST['stock'])
+                item.category = category
+                item.save()
+                
+            # ---------- Elimino un producto ----------
+                
+            if int(request.POST.get('delete')) == -1:
+                print('llego aca 1')
+                item_id = int(request.POST.get('item_id'))
+                item = Item.objects.get(id=item_id)
+                item.delete()
+        except:
+            pass
     return render(request, "dashboard/products.html", context)

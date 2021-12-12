@@ -106,12 +106,13 @@ function edit_item(id_edit,item){
     }
     if(confirm=="bye"){
       console.log('delete')
+      console.log(item)
       $('#delete').val(-1)
       loading()
       $.ajax({
       url: $(this).attr('action'),
-      type: 'delete',
-      data: {item_id:item, csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val()},
+      type: 'post',
+      data: {name: $('#name').val(), item_id:item, delete:-1, csrfmiddlewaretoken: $('[name="csrfmiddlewaretoken"]').val()},
       success: function(data) {
         if($('.table-body').length > 0){
           $('.table-body').html(`<div class="loading_table">
